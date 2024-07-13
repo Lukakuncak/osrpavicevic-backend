@@ -176,7 +176,7 @@ public class UserManagementService {
     public RegistrationResponse getMyInfo(String username) {
         RegistrationResponse response = RegistrationResponse.builder().build();
         try {
-            SchoolUserEntity user = schoolUserRepository.findByUsername(username).orElseThrow(() -> new RuntimeException(USER_NOT_FOUND);
+            SchoolUserEntity user = schoolUserRepository.findByUsername(username).orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
             response.setSchoolUserEntity(user);
             response.setStatusCode(200);
             response.setMessage("Successful!");
