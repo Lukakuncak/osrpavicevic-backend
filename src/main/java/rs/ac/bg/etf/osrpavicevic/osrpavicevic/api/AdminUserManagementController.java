@@ -34,7 +34,7 @@ public class AdminUserManagementController {
     public ResponseEntity<RegistrationResponse> updateUser(@PathVariable Integer userId,
                                                            @RequestBody SchoolUserUpdateRequest request) {
         SchoolUserEntity userEntity = SchoolUserEntity.builder().firstname(request.getFirstname())
-                .lastname(request.getLastname()).build();
+                .lastname(request.getLastname()).role(request.getRole().toUpperCase()).build();
         return ResponseEntity.ok(userManagementService.updateUser(userId, userEntity));
     }
 

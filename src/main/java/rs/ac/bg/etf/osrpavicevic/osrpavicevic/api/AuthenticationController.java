@@ -25,6 +25,8 @@ public class AuthenticationController {
     public ResponseEntity<RegistrationResponse> register(@RequestBody RegistrationRequest request) {
         if (request.getRole() == null || request.getRole().isEmpty()) {
             request.setRole(Role.STANDARD.name());
+        }else {
+            request.setRole(request.getRole().toUpperCase());
         }
         return ResponseEntity.ok(userManagementService.register(request));
     }
