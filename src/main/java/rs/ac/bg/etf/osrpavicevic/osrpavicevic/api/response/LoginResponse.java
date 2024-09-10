@@ -16,4 +16,5 @@ public class LoginResponse extends DefaultResponse{
     private String token;
     private String refreshToken;
     private String expirationDate;
+    private String role;
 }

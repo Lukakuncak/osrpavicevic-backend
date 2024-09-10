@@ -69,6 +69,7 @@ public class UserManagementService {
             response.setToken(token);
             response.setRefreshToken(refreshToken);
             response.setExpirationDate(JwtUtils.EXPIRATION_TIME_STRING);
+            response.setRole(user.getRole());
             response.setMessage("Successfully logged in!");
         } catch (Exception exception) {
             response.setStatusCode(500);
@@ -141,7 +142,7 @@ public class UserManagementService {
                     .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
             String username = schoolUserEntity.getUsername();
             schoolUserRepository.delete(schoolUserEntity);
-            response.setStatusCode(500);
+            response.setStatusCode(200);
             response.setMessage("Successfully deleted user with username: " + username + " and id: " + id);
         } catch (Exception exception) {
             response.setStatusCode(500);
