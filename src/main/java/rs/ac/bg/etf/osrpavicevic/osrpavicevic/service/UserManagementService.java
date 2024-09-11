@@ -1,6 +1,8 @@
 package rs.ac.bg.etf.osrpavicevic.osrpavicevic.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Service;
 import rs.ac.bg.etf.osrpavicevic.osrpavicevic.api.request.LoginRequest;
 import rs.ac.bg.etf.osrpavicevic.osrpavicevic.api.request.RefreshTokenRequest;
 import rs.ac.bg.etf.osrpavicevic.osrpavicevic.api.request.RegistrationRequest;
-import rs.ac.bg.etf.osrpavicevic.osrpavicevic.api.response.AllUserResponse;
 import rs.ac.bg.etf.osrpavicevic.osrpavicevic.api.response.DefaultResponse;
 import rs.ac.bg.etf.osrpavicevic.osrpavicevic.api.response.LoginResponse;
 import rs.ac.bg.etf.osrpavicevic.osrpavicevic.api.response.RegistrationResponse;
@@ -16,13 +17,12 @@ import rs.ac.bg.etf.osrpavicevic.osrpavicevic.entity.SchoolUserEntity;
 import rs.ac.bg.etf.osrpavicevic.osrpavicevic.respository.SchoolUserRepository;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserManagementService {
-    private final String USER_NOT_FOUND = "User not found!";
+    private static final String USER_NOT_FOUND = "User not found!";
     private final SchoolUserRepository schoolUserRepository;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
@@ -101,24 +101,12 @@ public class UserManagementService {
         }
     }
 
-    public AllUserResponse getAllUsers() {
-        AllUserResponse response = AllUserResponse.builder().build();
-        try {
-            List<SchoolUserEntity> userEntities = schoolUserRepository.findAll();
-            if (userEntities.isEmpty()) {
-                response.setStatusCode(200);
-                response.setMessage("No users found");
-            } else {
-                response.setUsers(userEntities);
-                response.setStatusCode(200);
-                response.setMessage("Successfuly fetched all users!");
-            }
-            return response;
-        } catch (Exception exception) {
-            response.setStatusCode(500);
-            response.setError(exception.getMessage());
+    public Page<SchoolUserEntity> getAllUsers(Pageable pageable, String search) {
+        if (search == null || search.isEmpty()) {
+            return schoolUserRepository.findAll(pageable);
+        } else {
+            return schoolUserRepository.findByUsernameContainingIgnoreCase(search, pageable);
         }
-        return response;
     }
 
     public RegistrationResponse getUserById(Integer id) {

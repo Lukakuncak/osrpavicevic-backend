@@ -17,4 +17,6 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AllUserResponse  extends DefaultResponse{
     List<SchoolUserEntity> users;
+    Integer totalPages;
+    long totalElements;
 }

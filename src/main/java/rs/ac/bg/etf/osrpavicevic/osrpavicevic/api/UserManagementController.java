@@ -2,6 +2,10 @@ package rs.ac.bg.etf.osrpavicevic.osrpavicevic.api;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -23,8 +27,19 @@ public class UserManagementController {
 
     @GetMapping("/get-all")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<AllUserResponse> getAllUsers() {
-        return ResponseEntity.ok(userManagementService.getAllUsers());
+    public ResponseEntity<AllUserResponse> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "") String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("username")); // Or any other sorting you prefer
+        Page<SchoolUserEntity> userPage = userManagementService.getAllUsers(pageable, search);
+
+        AllUserResponse response = new AllUserResponse();
+        response.setUsers(userPage.getContent());
+        response.setTotalPages(userPage.getTotalPages());
+        response.setTotalElements(userPage.getTotalElements());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/get/{userId}")
