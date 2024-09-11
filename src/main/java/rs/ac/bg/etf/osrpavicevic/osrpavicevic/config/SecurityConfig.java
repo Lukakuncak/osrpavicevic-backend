@@ -31,10 +31,8 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(request -> request.requestMatchers("/auth/**", "/public/**").permitAll()
-                        .requestMatchers("/admin/**").hasAnyAuthority(Role.ADMIN.name())
-                        .requestMatchers("/standard/**").hasAnyAuthority(Role.STANDARD.name())
-                        .requestMatchers("/adminstandard/**").hasAnyAuthority(Role.ADMIN.name(), Role.STANDARD.name())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**", "/public/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
