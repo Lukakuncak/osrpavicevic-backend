@@ -103,4 +103,10 @@ public class AuthService {
     public String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
+
+    public void authenticatePasswordAndUsername(String username, String password){
+        authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(username,
+                        password));
+    }
 }

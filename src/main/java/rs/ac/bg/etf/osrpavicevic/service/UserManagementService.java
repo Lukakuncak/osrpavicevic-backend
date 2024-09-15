@@ -56,11 +56,8 @@ public class UserManagementService {
     }
 
     public void changePassword(String username, String oldPassword, String newPassword) {
+        authService.authenticatePasswordAndUsername(username,oldPassword);
         SchoolUserEntity user = schoolUserRepository.findByUsername(username).orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
-        String oldEncodedPass = authService.encodePassword(oldPassword);
-        if(!oldEncodedPass.equals(user.getPassword())){
-            throw new RuntimeException("Entered wrong old password");
-        }
         user.setPassword(authService.encodePassword(newPassword));
         schoolUserRepository.save(user);
     }
