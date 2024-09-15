@@ -5,8 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.etf.osrpavicevic.api.request.SchoolUserUpdateRequest;
-import rs.ac.bg.etf.osrpavicevic.api.response.SchoolUserResponse;
-import rs.ac.bg.etf.osrpavicevic.api.response.DefaultResponse;
 import rs.ac.bg.etf.osrpavicevic.domain.SchoolUser;
 import rs.ac.bg.etf.osrpavicevic.entity.SchoolUserEntity;
 import rs.ac.bg.etf.osrpavicevic.mapper.SchoolUserMapper;
@@ -52,32 +50,18 @@ public class UserManagementService {
         return schoolUserMapper.toDomain(schoolUserRepository.save(userToUpdate));
     }
 
-    //Ne koristi se
-/*    public SchoolUserResponse updateUser(Integer id, SchoolUserEntity updateUser) {
-        SchoolUserResponse response = SchoolUserResponse.builder().build();
-        try {
-            SchoolUserEntity user = schoolUserRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
-            user.setUsername(updateUser.getUsername() == null ? user.getUsername() : updateUser.getUsername());
-            user.setFirstname(updateUser.getFirstname() == null ? user.getFirstname() : updateUser.getFirstname());
-            user.setLastname(updateUser.getLastname() == null ? user.getLastname() : updateUser.getLastname());
-            user.setRole(updateUser.getRole() == null ? user.getRole() : updateUser.getRole());
-            if (updateUser.getPassword() != null && !updateUser.getPassword().isEmpty()) {
-                user.setPassword(authService.encodePassword(updateUser.getPassword()));
-            }
-            SchoolUserEntity savedUser = schoolUserRepository.save(user);
-            response.setSchoolUser(schoolUserMapper.toDomain(savedUser));
-            response.setStatusCode(200);
-            response.setMessage("User updated successfully!");
-        } catch (Exception exception) {
-            response.setStatusCode(500);
-            response.setError(exception.getMessage());
-        }
-        return response;
-    }*/
-
     public SchoolUser getMyInfo(String username) {
         SchoolUserEntity user = schoolUserRepository.findByUsername(username).orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
         return schoolUserMapper.toDomain(user);
+    }
+
+    public void changePassword(String username, String oldPassword, String newPassword) {
+        SchoolUserEntity user = schoolUserRepository.findByUsername(username).orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
+        String oldEncodedPass = authService.encodePassword(oldPassword);
+        if(!oldEncodedPass.equals(user.getPassword())){
+            throw new RuntimeException("Entered wrong old password");
+        }
+        user.setPassword(authService.encodePassword(newPassword));
+        schoolUserRepository.save(user);
     }
 }

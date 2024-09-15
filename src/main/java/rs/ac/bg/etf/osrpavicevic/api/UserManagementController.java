@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -43,7 +44,7 @@ public class UserManagementController {
                     .statusCode(500)
                     .error(exception.getMessage())
                     .build();
-            return ResponseEntity.badRequest().body(exceptionResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
         }
     }
 
@@ -60,7 +61,7 @@ public class UserManagementController {
                     .statusCode(500)
                     .error(exception.getMessage())
                     .build();
-            return ResponseEntity.badRequest().body(exceptionResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
         }
     }
 
@@ -79,7 +80,7 @@ public class UserManagementController {
                     .statusCode(500)
                     .error(exception.getMessage())
                     .build();
-            return ResponseEntity.badRequest().body(exceptionResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
         }
     }
 
@@ -97,7 +98,7 @@ public class UserManagementController {
                     .statusCode(500)
                     .error(exception.getMessage())
                     .build();
-            return ResponseEntity.badRequest().body(exceptionResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
         }
     }
 
@@ -117,7 +118,27 @@ public class UserManagementController {
                     .statusCode(500)
                     .error(exception.getMessage())
                     .build();
-            return ResponseEntity.badRequest().body(exceptionResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
+        }
+    }
+
+    @PostMapping("change-password")
+    @PreAuthorize("hasAuthority('ADMIN') ||  hasAuthority('STANDARD')")
+    public ResponseEntity<DefaultResponse> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        try {
+            userManagementService.changePassword(username, oldPassword, newPassword);
+            return ResponseEntity.ok(DefaultResponse.builder()
+                    .statusCode(200)
+                    .message("Successfully changed password.")
+                    .build());
+        } catch (Exception exception) {
+            DefaultResponse exceptionResponse = DefaultResponse.builder()
+                    .statusCode(500)
+                    .error(exception.getMessage())
+                    .build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
         }
     }
 
