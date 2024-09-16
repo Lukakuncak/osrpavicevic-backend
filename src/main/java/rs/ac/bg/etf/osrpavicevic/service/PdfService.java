@@ -12,7 +12,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.rmi.RemoteException;
 import java.util.Arrays;
 
 @Service
@@ -20,21 +19,21 @@ public class PdfService {
     @Value("${pdf.upload.dir}")
     private String uploadDir;
 
-    public String uploadFile(MultipartFile file) throws IOException {
+    public String uploadFile(String rootFile, MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             throw new RuntimeException("File is empty.");
         }
-        Path path = Paths.get(uploadDir);
+        Path path = Paths.get(uploadDir+'/'+rootFile);
         if (!Files.exists(path)) {
             Files.createDirectories(path);
         }
-        Path filePath = Paths.get(uploadDir + File.separator + file.getOriginalFilename());
+        Path filePath = Paths.get(uploadDir+'/'+rootFile + File.separator + file.getOriginalFilename());
         file.transferTo(filePath);
         return "Successfully uploaded file!";
     }
 
-    public String[] listPdfFiles() {
-        File folder = new File(uploadDir);
+    public String[] listPdfFiles(String rootFile) {
+        File folder = new File(uploadDir+'/'+rootFile);
         File[] files = folder.listFiles((dir, name) -> name.endsWith(".pdf"));
         if (files != null) {
             return Arrays.stream(files).map(File::getName).toArray(String[]::new);
@@ -42,8 +41,8 @@ public class PdfService {
         return new String[0];
     }
 
-    public Resource getPdfFile(String filename) throws MalformedURLException {
-        Path filepath = Paths.get(uploadDir).resolve(filename);
+    public Resource getPdfFile(String rootFile, String filename) throws MalformedURLException {
+        Path filepath = Paths.get(uploadDir+'/'+rootFile).resolve(filename);
         Resource resource = new UrlResource(filepath.toUri());
         if(resource.exists() || resource.isReadable()){
             return resource;
@@ -51,5 +50,11 @@ public class PdfService {
         else {
             throw new RuntimeException("File "+filename+" not found.");
         }
+    }
+
+    public String deleteFile(String rootFile, String filename) throws IOException {
+        Path filePath = Paths.get(uploadDir+'/'+rootFile).resolve(filename).normalize();
+        Files.deleteIfExists(filePath);
+        return "File "+filename+" successfully deleted.";
     }
 }
