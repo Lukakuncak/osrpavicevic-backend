@@ -37,5 +37,5 @@ public class CommentEntity {
     private LocalDateTime replyCreatedDate;
 
     @Column(nullable = false)
-    private boolean approved = false;
+    private boolean approved;
 }

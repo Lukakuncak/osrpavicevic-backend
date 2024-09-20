@@ -12,7 +12,7 @@ public interface NewsMapper {
     @Mapping(target = "title", source = "createRequest.title")
     @Mapping(target = "content", source = "createRequest.content")
     @Mapping(target = "type", source = "createRequest.type")
-    @Mapping(target = "dateTime", source = "createRequest.dateTime")
+    @Mapping(target = "dateTime", ignore = true)
     @Mapping(target = "clicks", constant = "0L")
     @Mapping(target = "pinned", constant = "false")
     @Mapping(target = "deleted", constant = "false")

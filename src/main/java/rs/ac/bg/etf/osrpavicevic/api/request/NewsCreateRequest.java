@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 public record NewsCreateRequest(
         String title,
         String content,
-        TypeOfNews type,
-        LocalDateTime dateTime
+        TypeOfNews type
 ) {
 }
