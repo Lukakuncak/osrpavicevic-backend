@@ -26,11 +26,9 @@ public class NewsController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/news/create")
     public ResponseEntity<NewsResponse> createNews(@RequestBody NewsCreateRequest newsRequest) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
         try {
             return ResponseEntity.ok(NewsResponse.builder()
-                    .news(newsService.createNews(newsRequest, username))
+                    .news(newsService.createNews(newsRequest))
                     .statusCode(200)
                     .message("News successfully created!")
                     .build());

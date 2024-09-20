@@ -9,7 +9,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import rs.ac.bg.etf.osrpavicevic.domain.News;
 
-@Data
 @SuperBuilder
 @Getter
 @Setter

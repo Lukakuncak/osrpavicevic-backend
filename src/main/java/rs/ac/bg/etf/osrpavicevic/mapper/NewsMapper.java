@@ -8,14 +8,17 @@ import rs.ac.bg.etf.osrpavicevic.entity.NewsEntity;
 
 @Mapper(componentModel = "spring")
 public interface NewsMapper {
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "title", source = "createRequest.title")
     @Mapping(target = "content", source = "createRequest.content")
     @Mapping(target = "type", source = "createRequest.type")
-    @Mapping(target = "author", source = "username")
     @Mapping(target = "dateTime", source = "createRequest.dateTime")
     @Mapping(target = "clicks", constant = "0L")
     @Mapping(target = "pinned", constant = "false")
-    NewsEntity fromCreateToEntity(NewsCreateRequest createRequest, String username);
+    @Mapping(target = "deleted", constant = "false")
+    @Mapping(target = "comments", ignore = true)
+    NewsEntity fromCreateToEntity(NewsCreateRequest createRequest);
 
+    @Mapping(target = "comments", ignore = true)
     News toDomain(NewsEntity newsEntity);
 }

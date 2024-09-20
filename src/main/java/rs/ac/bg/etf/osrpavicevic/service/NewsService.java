@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import rs.ac.bg.etf.osrpavicevic.api.request.NewsCreateRequest;
 import rs.ac.bg.etf.osrpavicevic.constants.TypeOfNews;
 import rs.ac.bg.etf.osrpavicevic.domain.News;
+import rs.ac.bg.etf.osrpavicevic.entity.NewsEntity;
 import rs.ac.bg.etf.osrpavicevic.mapper.NewsMapper;
 import rs.ac.bg.etf.osrpavicevic.respository.NewsRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -18,8 +20,10 @@ public class NewsService {
     private final NewsMapper newsMapper;
     private final NewsRepository newsRepository;
 
-    public News createNews(NewsCreateRequest newsRequest, String username) {
-        return newsMapper.toDomain(newsRepository.save(newsMapper.fromCreateToEntity(newsRequest, username)));
+    public News createNews(NewsCreateRequest newsRequest) {
+        NewsEntity newsEntity = newsMapper.fromCreateToEntity(newsRequest);
+        newsEntity.setDateTime(LocalDateTime.now());
+        return newsMapper.toDomain(newsRepository.save(newsEntity));
 
     }
 

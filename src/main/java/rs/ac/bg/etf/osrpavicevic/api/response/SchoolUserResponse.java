@@ -7,7 +7,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import rs.ac.bg.etf.osrpavicevic.domain.SchoolUser;
 
-@Data
+
 @SuperBuilder
 @Getter
 @Setter

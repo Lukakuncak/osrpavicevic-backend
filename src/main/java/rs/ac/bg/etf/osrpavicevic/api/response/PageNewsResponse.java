@@ -10,7 +10,6 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.domain.Page;
 import rs.ac.bg.etf.osrpavicevic.domain.News;
 
-@Data
 @SuperBuilder
 @Getter
 @Setter
