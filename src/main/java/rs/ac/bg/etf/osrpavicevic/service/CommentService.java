@@ -41,7 +41,7 @@ public class CommentService {
     }
 
     public List<Comments> getAllUnapproved() {
-        List<CommentEntity> commentEntities = commentRepository.findAllByApprovedTrue();
+        List<CommentEntity> commentEntities = commentRepository.findAllByApprovedFalse();
         return commentEntities.stream().map(commentEntity -> {
             Comments commentsElement = commentMapper.toDomain(commentEntity);
             News mappedNews = newsMapper.toDomain(commentEntity.getNews());
@@ -49,4 +49,18 @@ public class CommentService {
             return commentsElement;
         }).toList();
     }
+
+    public void approveComment(Long id) {
+        CommentEntity commentEntity = commentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No comment with id " + id + " found"));
+        commentEntity.setApproved(true);
+        commentRepository.save(commentEntity);
+    }
+
+    public void deleteComment(Long id) {
+        CommentEntity commentEntity = commentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No comment with id " + id + " found"));
+        commentRepository.delete(commentEntity);
+    }
+
 }
