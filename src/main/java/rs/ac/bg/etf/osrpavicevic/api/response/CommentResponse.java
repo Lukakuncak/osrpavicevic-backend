@@ -2,8 +2,11 @@ package rs.ac.bg.etf.osrpavicevic.api.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import rs.ac.bg.etf.osrpavicevic.domain.Comments;
 
 @SuperBuilder
 @Getter
@@ -11,10 +14,6 @@ import lombok.experimental.SuperBuilder;
 @RequiredArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LoginResponse extends DefaultResponse{
-    private Integer id;
-    private String token;
-    private String refreshToken;
-    private String expirationDate;
-    private String role;
+public class CommentResponse extends DefaultResponse{
+    private Comments comment;
 }

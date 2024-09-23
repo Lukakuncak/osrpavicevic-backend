@@ -66,6 +66,7 @@ public class AuthService {
             String refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
             response.setStatusCode(200);
             response.setToken(token);
+            response.setId(user.getId());
             response.setRefreshToken(refreshToken);
             response.setExpirationDate(JwtUtils.EXPIRATION_TIME_STRING);
             response.setRole(user.getRole());
@@ -85,6 +86,7 @@ public class AuthService {
             SchoolUserEntity schoolUserEntity = schoolUserRepository.findByUsername(username).orElseThrow();
             if (jwtUtils.isTokenValid(request.refreshToken(), schoolUserEntity)) {
                 String token = jwtUtils.generateToken(schoolUserEntity);
+                response.setId(schoolUserEntity.getId());
                 response.setStatusCode(200);
                 response.setToken(token);
                 response.setRefreshToken(request.refreshToken());

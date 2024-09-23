@@ -9,7 +9,6 @@ import rs.ac.bg.etf.osrpavicevic.api.response.SchoolUserResponse;
 import rs.ac.bg.etf.osrpavicevic.constants.Role;
 import rs.ac.bg.etf.osrpavicevic.api.request.LoginRequest;
 import rs.ac.bg.etf.osrpavicevic.api.request.RegistrationRequest;
-import rs.ac.bg.etf.osrpavicevic.constants.TypeOfNews;
 import rs.ac.bg.etf.osrpavicevic.service.AuthService;
 
 import java.util.Arrays;

@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.bg.etf.osrpavicevic.api.request.NewsCreateRequest;
+import rs.ac.bg.etf.osrpavicevic.api.response.DefaultResponse;
 import rs.ac.bg.etf.osrpavicevic.api.response.PageNewsResponse;
 import rs.ac.bg.etf.osrpavicevic.api.response.NewsResponse;
 import rs.ac.bg.etf.osrpavicevic.constants.TypeOfNews;
@@ -56,7 +56,7 @@ public class NewsController {
             Sort.Direction direction = Sort.Direction.fromString(sortDir);
             Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
             return ResponseEntity.ok(PageNewsResponse.builder()
-                    .newsPage(newsService.getAllNews(pageable,search))
+                    .newsPage(newsService.getAllNews(pageable, search))
                     .statusCode(200)
                     .message("Fetched all news successfully.")
                     .build());
@@ -88,6 +88,32 @@ public class NewsController {
             return ResponseEntity.internalServerError().body(PageNewsResponse.builder()
                     .error(exception.getMessage())
                     .statusCode(500)
+                    .build());
+        }
+    }
+
+    @GetMapping("public/news/{id}")
+    public ResponseEntity<NewsResponse> getNewsById(@PathVariable("id") Long id) {
+        try {
+            return ResponseEntity.ok(NewsResponse.builder().message("Successfully fetched comments").statusCode(200)
+                    .news(newsService.getNewsWithComments(id))
+                    .build());
+        } catch (Exception exception) {
+            return ResponseEntity.internalServerError().body(NewsResponse.builder()
+                    .error(exception.getMessage())
+                    .statusCode(500)
+                    .build());
+        }
+    }
+
+    @PutMapping("public/news/update-click/{id}")
+    public ResponseEntity<DefaultResponse> updateClickCount(@PathVariable("id") Long id) {
+        try {
+            return ResponseEntity.ok(DefaultResponse.builder().statusCode(200).message(newsService.updateClickCount(id)).build());
+        } catch (Exception exception) {
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(DefaultResponse.builder()
+                    .statusCode(500)
+                    .error(exception.getMessage())
                     .build());
         }
     }
