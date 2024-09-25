@@ -117,4 +117,17 @@ public class NewsController {
                     .build());
         }
     }
+
+    @PutMapping("news/pin-unpin-news/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<DefaultResponse> pinUnpinNews(@PathVariable("id") Long id){
+        try {
+            return ResponseEntity.ok(DefaultResponse.builder().statusCode(200).message(newsService.pinUnpinNews(id)).build());
+        } catch (Exception exception) {
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(DefaultResponse.builder()
+                    .statusCode(500)
+                    .error(exception.getMessage())
+                    .build());
+        }
+    }
 }

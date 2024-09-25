@@ -55,10 +55,18 @@ public class NewsService {
     }
 
     public String updateClickCount(Long id) {
-        NewsEntity newsEntity = newsRepository.findById(id).orElseThrow(()-> new RuntimeException("Missing news with id: "+id));
+        NewsEntity newsEntity = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("Missing news with id: " + id));
         Long clicks = newsEntity.getClicks();
         newsEntity.setClicks(++clicks);
         newsRepository.save(newsEntity);
         return "Successfully updated click count.";
+    }
+
+    public String pinUnpinNews(Long id) {
+        NewsEntity newsEntity = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("Missing news with id: " + id));
+        boolean pinned = newsEntity.isPinned();
+        newsEntity.setPinned(!pinned);
+        newsRepository.save(newsEntity);
+        return "Successfully pinned/unpinned news";
     }
 }

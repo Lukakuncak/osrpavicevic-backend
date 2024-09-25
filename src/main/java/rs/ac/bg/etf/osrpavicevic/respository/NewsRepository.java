@@ -10,6 +10,7 @@ import rs.ac.bg.etf.osrpavicevic.entity.NewsEntity;
 import java.util.Optional;
 
 public interface NewsRepository extends JpaRepository<NewsEntity, Long> {
+    Page<NewsEntity> findAllByPinned(Boolean pinned, Pageable pageable);
     Page<NewsEntity> findAllByType(TypeOfNews type, Pageable pageable);
     Page<NewsEntity> findAllByTypeAndTitleContainingIgnoreCase(TypeOfNews type, String title, Pageable pageable);
     Page<NewsEntity> findAllByTitleContainingIgnoreCase(String search, Pageable pageable);
