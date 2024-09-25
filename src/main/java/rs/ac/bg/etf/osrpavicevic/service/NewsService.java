@@ -32,17 +32,17 @@ public class NewsService {
 
     public Page<News> getAllNews(Pageable pageable, String search) {
         if (search == null || search.isEmpty()) {
-            return newsRepository.findAll(pageable).map(newsMapper::toDomain);
+            return newsRepository.findAllByPinnedFalseAndDeletedFalse(pageable).map(newsMapper::toDomain);
         } else {
-            return newsRepository.findAllByTitleContainingIgnoreCase(search, pageable).map(newsMapper::toDomain);
+            return newsRepository.findAllByTitleContainingIgnoreCaseAndPinnedFalseAndDeletedFalse(search, pageable).map(newsMapper::toDomain);
         }
     }
 
     public Page<News> getAllNewsByType(TypeOfNews typeOfNews, String search, Pageable pageable) {
         if (search == null || search.isEmpty()) {
-            return newsRepository.findAllByType(typeOfNews, pageable).map(newsMapper::toDomain);
+            return newsRepository.findAllByTypeAndPinnedFalseAndDeletedFalse(typeOfNews, pageable).map(newsMapper::toDomain);
         } else {
-            return newsRepository.findAllByTypeAndTitleContainingIgnoreCase(typeOfNews, search, pageable).map(newsMapper::toDomain);
+            return newsRepository.findAllByTypeAndTitleContainingIgnoreCaseAndPinnedFalseAndDeletedFalse(typeOfNews, search, pageable).map(newsMapper::toDomain);
         }
     }
 
@@ -68,5 +68,9 @@ public class NewsService {
         newsEntity.setPinned(!pinned);
         newsRepository.save(newsEntity);
         return "Successfully pinned/unpinned news";
+    }
+
+    public List<News> getAllNewsPinned() {
+        return newsRepository.findAllByPinnedTrue().stream().map(newsMapper::toDomain).toList();
     }
 }

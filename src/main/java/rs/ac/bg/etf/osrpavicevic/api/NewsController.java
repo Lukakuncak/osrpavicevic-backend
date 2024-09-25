@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.bg.etf.osrpavicevic.api.request.NewsCreateRequest;
 import rs.ac.bg.etf.osrpavicevic.api.response.DefaultResponse;
+import rs.ac.bg.etf.osrpavicevic.api.response.ListNewsResponse;
 import rs.ac.bg.etf.osrpavicevic.api.response.PageNewsResponse;
 import rs.ac.bg.etf.osrpavicevic.api.response.NewsResponse;
 import rs.ac.bg.etf.osrpavicevic.constants.TypeOfNews;
@@ -62,6 +63,22 @@ public class NewsController {
                     .build());
         } catch (Exception exception) {
             return ResponseEntity.internalServerError().body(PageNewsResponse.builder()
+                    .error(exception.getMessage())
+                    .statusCode(500)
+                    .build());
+        }
+    }
+
+    @GetMapping("public/news/get-all-pinned")
+    public ResponseEntity<ListNewsResponse> getAllPinnedNews(){
+        try{
+            return ResponseEntity.ok(ListNewsResponse.builder()
+                    .newsList(newsService.getAllNewsPinned())
+                    .statusCode(200)
+                    .message("Fetched all news successfully.")
+                    .build());
+        } catch (Exception exception) {
+            return ResponseEntity.internalServerError().body(ListNewsResponse.builder()
                     .error(exception.getMessage())
                     .statusCode(500)
                     .build());
