@@ -147,4 +147,17 @@ public class NewsController {
                     .build());
         }
     }
+
+    @PutMapping("news/delete/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<DefaultResponse> deleteNews(@PathVariable("id") Long id){
+        try {
+            return ResponseEntity.ok(DefaultResponse.builder().statusCode(200).message(newsService.deleteNews(id)).build());
+        } catch (Exception exception) {
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(DefaultResponse.builder()
+                    .statusCode(500)
+                    .error(exception.getMessage())
+                    .build());
+        }
+    }
 }

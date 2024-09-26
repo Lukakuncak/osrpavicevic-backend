@@ -73,4 +73,11 @@ public class NewsService {
     public List<News> getAllNewsPinned() {
         return newsRepository.findAllByPinnedTrue().stream().map(newsMapper::toDomain).toList();
     }
+
+    public String deleteNews(Long id) {
+        NewsEntity newsEntity = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("Missing news with id: " + id));
+        newsEntity.setDeleted(true);
+        newsRepository.save(newsEntity);
+        return "Successfully deleted news";
+    }
 }
