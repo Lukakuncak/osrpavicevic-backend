@@ -11,4 +11,5 @@ public class Notification {
     private Long id;
     private Comment comment;
     private SchoolUser schoolUser;
+    private boolean viewed;
 }

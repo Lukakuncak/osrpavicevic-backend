@@ -38,6 +38,9 @@ public class SchoolUserEntity implements UserDetails {
     @Column(nullable = false)
     private String role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NotificationEntity> notifications;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

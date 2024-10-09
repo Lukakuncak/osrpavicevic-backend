@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
 
     List<CommentEntity> findAllByApprovedFalse();
+    List<CommentEntity> findAllByReplyIsNull();
 
 
     @EntityGraph(attributePaths = {"user"})

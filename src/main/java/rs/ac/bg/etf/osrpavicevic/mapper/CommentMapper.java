@@ -24,5 +24,6 @@ public interface CommentMapper {
     @Mapping(target = "reply", ignore = true)
     @Mapping(target = "replyCreatedDate", ignore = true)
     @Mapping(target = "approved", constant = "false")
+    @Mapping(target = "notifications", ignore = true)
     CommentEntity fromCreateRequest(CommentRequest commentRequest);
 }

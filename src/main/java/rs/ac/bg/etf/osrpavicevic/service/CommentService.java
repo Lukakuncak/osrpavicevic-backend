@@ -93,4 +93,14 @@ public class CommentService {
         comment.setNews(mappedNews);
         return comment;
     }
+
+    public List<Comment> getAllUneplied() {
+        List<CommentEntity> commentEntities = commentRepository.findAllByReplyIsNull();
+        return commentEntities.stream().map(commentEntity -> {
+            Comment commentsElement = commentMapper.toDomain(commentEntity);
+            News mappedNews = newsMapper.toDomain(commentEntity.getNews());
+            commentsElement.setNews(mappedNews);
+            return commentsElement;
+        }).toList();
+    }
 }

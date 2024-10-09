@@ -47,6 +47,20 @@ public class CommentController {
         }
     }
 
+    @GetMapping("/get-all-unreplied")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<CommentsResponse> getAllUnreplied() {
+        try {
+            return ResponseEntity.ok(CommentsResponse.builder().statusCode(200).message("All unreplied comments fetched successfully")
+                    .comments(commentService.getAllUneplied()).build());
+        } catch (Exception exception) {
+            return ResponseEntity.internalServerError()
+                    .body(CommentsResponse.builder()
+                            .error(exception.getMessage())
+                            .statusCode(500).build());
+        }
+    }
+
     @GetMapping("/get-comment/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CommentResponse> getSingleComment(@PathVariable("id")Long id){
