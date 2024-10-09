@@ -1,11 +1,12 @@
 package rs.ac.bg.etf.osrpavicevic.entity;
 
-import jakarta.annotation.Nonnull;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 
 import java.util.Collection;
 import java.util.List;
@@ -37,13 +38,6 @@ public class SchoolUserEntity implements UserDetails {
     @Column(nullable = false)
     private String role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private transient List<NotificationEntity> notifications;
-
-    public void addNotification(NotificationEntity notification) {
-        this.notifications.add(notification);
-        notification.setUser(this);
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

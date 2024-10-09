@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
-public class Comments {
+public class Comment {
     Long id;
     private SchoolUser user;
     private News news;

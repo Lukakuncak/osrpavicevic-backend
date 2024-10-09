@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.etf.osrpavicevic.api.request.NewsCreateRequest;
 import rs.ac.bg.etf.osrpavicevic.constants.TypeOfNews;
-import rs.ac.bg.etf.osrpavicevic.domain.Comments;
+import rs.ac.bg.etf.osrpavicevic.domain.Comment;
 import rs.ac.bg.etf.osrpavicevic.domain.News;
 import rs.ac.bg.etf.osrpavicevic.entity.NewsEntity;
 import rs.ac.bg.etf.osrpavicevic.mapper.CommentMapper;
@@ -48,7 +48,7 @@ public class NewsService {
 
     public News getNewsWithComments(Long id) {
         NewsEntity newsEntity = newsRepository.findByIdWithComments(id).orElseThrow(() -> new RuntimeException("Missing news with id: " + id));
-        List<Comments> comments = commentMapper.toDomain(newsEntity.getComments());
+        List<Comment> comments = commentMapper.toDomain(newsEntity.getComments());
         News news = newsMapper.toDomain(newsEntity);
         news.setComments(comments);
         return news;

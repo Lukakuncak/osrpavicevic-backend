@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.bg.etf.osrpavicevic.api.request.SchoolUserUpdateRequest;
 import rs.ac.bg.etf.osrpavicevic.api.response.DefaultResponse;
+import rs.ac.bg.etf.osrpavicevic.api.response.NotificationResponse;
 import rs.ac.bg.etf.osrpavicevic.api.response.SchoolUserResponse;
 import rs.ac.bg.etf.osrpavicevic.api.response.AllUserResponse;
 import rs.ac.bg.etf.osrpavicevic.service.UserManagementService;
@@ -135,6 +136,26 @@ public class UserManagementController {
                     .build());
         } catch (Exception exception) {
             DefaultResponse exceptionResponse = DefaultResponse.builder()
+                    .statusCode(500)
+                    .error(exception.getMessage())
+                    .build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
+        }
+    }
+
+    @GetMapping("/get-notifications")
+    @PreAuthorize("hasAuthority('ADMIN') ||  hasAuthority('STANDARD')")
+    public ResponseEntity<NotificationResponse> getNotifications(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        try {
+            NotificationResponse myUser = NotificationResponse.builder()
+                    .notifications(userManagementService.getNotifications(username))
+                    .statusCode(200)
+                    .message("Notifications successfully fetched.").build();
+            return ResponseEntity.ok(myUser);
+        } catch (Exception exception) {
+            NotificationResponse exceptionResponse = NotificationResponse.builder().notifications(null)
                     .statusCode(500)
                     .error(exception.getMessage())
                     .build();

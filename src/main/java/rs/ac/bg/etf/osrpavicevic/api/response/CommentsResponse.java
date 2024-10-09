@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import rs.ac.bg.etf.osrpavicevic.domain.Comments;
+import rs.ac.bg.etf.osrpavicevic.domain.Comment;
 
 import java.util.List;
 
@@ -17,5 +17,5 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommentsResponse extends DefaultResponse {
-    private List<Comments> comments;
+    private List<Comment> comments;
 }

@@ -25,4 +25,7 @@ public class NotificationEntity {
     @ManyToOne
     @JoinColumn(nullable = false)
     private SchoolUserEntity user;
+
+    @JoinColumn(nullable = false)
+    private Boolean viewed;
 }

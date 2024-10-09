@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import rs.ac.bg.etf.osrpavicevic.domain.Comment;
+
+import java.util.List;
+
 
 @SuperBuilder
 @Getter
@@ -14,6 +16,6 @@ import rs.ac.bg.etf.osrpavicevic.domain.Comment;
 @RequiredArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CommentResponse extends DefaultResponse{
-    private Comment comment;
+public class NotificationResponse extends DefaultResponse {
+   private List<SingleNotificationResponse> notifications;
 }
