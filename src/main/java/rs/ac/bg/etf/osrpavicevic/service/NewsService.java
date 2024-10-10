@@ -1,5 +1,6 @@
 package rs.ac.bg.etf.osrpavicevic.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ public class NewsService {
     private final CommentMapper commentMapper;
     private final NewsRepository newsRepository;
 
+    @Transactional
     public News createNews(NewsCreateRequest newsRequest) {
         NewsEntity newsEntity = newsMapper.fromCreateToEntity(newsRequest);
         newsEntity.setDateTime(LocalDateTime.now());
@@ -54,6 +56,7 @@ public class NewsService {
         return news;
     }
 
+    @Transactional
     public String updateClickCount(Long id) {
         NewsEntity newsEntity = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("Missing news with id: " + id));
         Long clicks = newsEntity.getClicks();
@@ -62,6 +65,7 @@ public class NewsService {
         return "Successfully updated click count.";
     }
 
+    @Transactional
     public String pinUnpinNews(Long id) {
         NewsEntity newsEntity = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("Missing news with id: " + id));
         boolean pinned = newsEntity.isPinned();
@@ -74,6 +78,7 @@ public class NewsService {
         return newsRepository.findAllByPinnedTrue().stream().map(newsMapper::toDomain).toList();
     }
 
+    @Transactional
     public String deleteNews(Long id) {
         NewsEntity newsEntity = newsRepository.findById(id).orElseThrow(() -> new RuntimeException("Missing news with id: " + id));
         newsEntity.setDeleted(true);

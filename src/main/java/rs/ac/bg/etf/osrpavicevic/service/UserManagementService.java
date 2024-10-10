@@ -1,5 +1,6 @@
 package rs.ac.bg.etf.osrpavicevic.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,7 @@ public class UserManagementService {
         return schoolUserMapper.toDomain(user);
     }
 
+    @Transactional
     public void deleteUser(Integer id) {
         SchoolUserEntity schoolUserEntity = schoolUserRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
@@ -41,6 +43,7 @@ public class UserManagementService {
     }
 
 
+    @Transactional
     public SchoolUser updateUser(SchoolUserUpdateRequest updateRequest) {
         if (updateRequest.id() == null) throw new RuntimeException("Id of update request cant be null");
         SchoolUserEntity userToUpdate = schoolUserRepository.findById(updateRequest.id())
@@ -56,6 +59,7 @@ public class UserManagementService {
         return schoolUserMapper.toDomain(user);
     }
 
+    @Transactional
     public void changePassword(String username, String oldPassword, String newPassword) {
         authService.authenticatePasswordAndUsername(username, oldPassword);
         SchoolUserEntity user = schoolUserRepository.findByUsername(username).orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));

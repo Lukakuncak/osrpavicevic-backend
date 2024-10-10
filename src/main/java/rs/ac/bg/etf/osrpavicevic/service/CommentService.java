@@ -1,5 +1,6 @@
 package rs.ac.bg.etf.osrpavicevic.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import rs.ac.bg.etf.osrpavicevic.api.request.CommentRequest;
@@ -54,6 +55,7 @@ public class CommentService {
         }).toList();
     }
 
+    @Transactional
     public void approveComment(Long id) {
         CommentEntity commentEntity = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No comment with id " + id + " found"));
@@ -61,12 +63,14 @@ public class CommentService {
         commentRepository.save(commentEntity);
     }
 
+    @Transactional
     public void deleteComment(Long id) {
         CommentEntity commentEntity = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No comment with id " + id + " found"));
         commentRepository.delete(commentEntity);
     }
 
+    @Transactional
     public void replyToComment(Long id, String reply) {
         CommentEntity commentEntity = commentRepository.findByIdWithUser(id)
                 .orElseThrow(() -> new RuntimeException("No comment with id " + id + " found"));

@@ -1,5 +1,6 @@
 package rs.ac.bg.etf.osrpavicevic.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +28,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final SchoolUserMapper schoolUserMapper;
 
+    @Transactional
     public SchoolUserResponse register(RegistrationRequest request) {
         SchoolUserResponse response = SchoolUserResponse.builder().build();
         try {
@@ -54,6 +56,7 @@ public class AuthService {
         }
         return response;
     }
+
 
     public LoginResponse login(LoginRequest loginRequest) {
         LoginResponse response = LoginResponse.builder().build();

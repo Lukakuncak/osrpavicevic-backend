@@ -1,5 +1,6 @@
 package rs.ac.bg.etf.osrpavicevic.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -19,6 +20,7 @@ public class PdfService {
     @Value("${pdf.upload.dir}")
     private String uploadDir;
 
+    @Transactional
     public String uploadFile(String rootFile, MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             throw new RuntimeException("File is empty.");
@@ -52,6 +54,7 @@ public class PdfService {
         }
     }
 
+    @Transactional
     public String deleteFile(String rootFile, String filename) throws IOException {
         Path filePath = Paths.get(uploadDir+'/'+rootFile).resolve(filename).normalize();
         Files.deleteIfExists(filePath);
