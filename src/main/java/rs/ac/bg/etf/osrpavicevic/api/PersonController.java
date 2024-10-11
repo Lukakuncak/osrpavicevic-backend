@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import rs.ac.bg.etf.osrpavicevic.api.request.PersonRequest;
 import rs.ac.bg.etf.osrpavicevic.api.response.DefaultResponse;
+import rs.ac.bg.etf.osrpavicevic.api.response.PersonResponse;
 import rs.ac.bg.etf.osrpavicevic.api.response.PersonsResponse;
 import rs.ac.bg.etf.osrpavicevic.constants.TypeOfPersons;
 import rs.ac.bg.etf.osrpavicevic.service.PersonService;
@@ -30,13 +31,12 @@ public class PersonController {
 
     @PostMapping("person/create-person")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<DefaultResponse> createNewPerson(@RequestBody PersonRequest personRequest) {
+    public ResponseEntity<PersonResponse> createNewPerson(@RequestBody PersonRequest personRequest) {
         try {
-            personService.createNewPerson(personRequest);
-            return ResponseEntity.ok(DefaultResponse.builder().statusCode(200).message("Successfully created person.")
+            return ResponseEntity.ok(PersonResponse.builder().person(personService.createNewPerson(personRequest)).statusCode(200).message("Successfully created person.")
                     .build());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(DefaultResponse.builder().error(e.getMessage()).statusCode(500).build());
+            return ResponseEntity.internalServerError().body(PersonResponse.builder().error(e.getMessage()).statusCode(500).build());
         }
     }
 

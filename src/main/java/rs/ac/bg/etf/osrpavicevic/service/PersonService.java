@@ -29,9 +29,9 @@ public class PersonService {
     }
 
     @Transactional
-    public void createNewPerson(PersonRequest personRequest) {
+    public Person createNewPerson(PersonRequest personRequest) {
         PersonEntity personEntity = personMapper.toEntity(personRequest);
-        personRepository.save(personEntity);
+        return personMapper.toDomain(personRepository.save(personEntity));
     }
 
     @Transactional
@@ -49,14 +49,18 @@ public class PersonService {
     }
 
     @Transactional
-    public void deletePerson(Integer id) {
+    public void deletePerson(Integer id) throws IOException {
         Optional<PersonEntity> personEntityOptional = personRepository.findById(id);
         if (personEntityOptional.isPresent()) {
+            if(personEntityOptional.get().getImage()!=null){
+                deletePictureForPerson(id);
+            }
             personRepository.delete(personEntityOptional.get());
         } else {
             throw new RuntimeException("Person with id not found: " + id);
         }
     }
+
 
     @Transactional
     public void addImageToPerson(Integer id, MultipartFile multipartFile) throws IOException {
@@ -64,7 +68,10 @@ public class PersonService {
         if (personEntityOptional.isPresent()) {
             PersonEntity personEntity = personEntityOptional.get();
             Image image = cloudinaryService.uploadImage(multipartFile);
-            personEntity.setImage(ImageEntity.builder().id(image.getId()).build());
+            personEntity.setImage(ImageEntity.builder().id(image.getId())
+                    .imageId(image.getImageId())
+                    .imageUrl(image.getImageUrl())
+                    .name(image.getName()).build());
             personRepository.save(personEntity);
         } else {
             throw new RuntimeException("Person with id not found: " + id);
