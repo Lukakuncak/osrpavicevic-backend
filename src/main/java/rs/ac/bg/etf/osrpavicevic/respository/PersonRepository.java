@@ -16,4 +16,7 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Integer> {
     List<PersonEntity> getAllByType(TypeOfPersons type);
     @Query("SELECT p FROM PersonEntity p LEFT JOIN FETCH p.image WHERE p.id = :id")
     Optional<PersonEntity> findByIdWithImage(@Param("id") Integer id);
+
+    @Query("SELECT count(*) FROM PersonEntity p WHERE p.type = :type")
+    Integer getNumberOfSingleType(TypeOfPersons type);
 }

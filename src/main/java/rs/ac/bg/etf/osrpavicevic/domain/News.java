@@ -20,5 +20,6 @@ public class News {
     private Long clicks;
     private boolean pinned;
     private boolean deleted;
+    private Image image;
     private List<Comment> comments;
 }

@@ -3,7 +3,9 @@ package rs.ac.bg.etf.osrpavicevic.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import rs.ac.bg.etf.osrpavicevic.api.request.NewsCreateRequest;
+import rs.ac.bg.etf.osrpavicevic.domain.Image;
 import rs.ac.bg.etf.osrpavicevic.domain.News;
+import rs.ac.bg.etf.osrpavicevic.entity.ImageEntity;
 import rs.ac.bg.etf.osrpavicevic.entity.NewsEntity;
 
 @Mapper(componentModel = "spring")
@@ -21,4 +23,6 @@ public interface NewsMapper {
 
     @Mapping(target = "comments", ignore = true)
     News toDomain(NewsEntity newsEntity);
+
+    Image toDomain(ImageEntity image);
 }

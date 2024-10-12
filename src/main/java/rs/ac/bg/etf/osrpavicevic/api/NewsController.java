@@ -8,12 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import rs.ac.bg.etf.osrpavicevic.api.request.NewsContentRequest;
 import rs.ac.bg.etf.osrpavicevic.api.request.NewsCreateRequest;
 import rs.ac.bg.etf.osrpavicevic.api.response.DefaultResponse;
 import rs.ac.bg.etf.osrpavicevic.api.response.ListNewsResponse;
 import rs.ac.bg.etf.osrpavicevic.api.response.PageNewsResponse;
 import rs.ac.bg.etf.osrpavicevic.api.response.NewsResponse;
 import rs.ac.bg.etf.osrpavicevic.constants.TypeOfNews;
+import rs.ac.bg.etf.osrpavicevic.domain.News;
 import rs.ac.bg.etf.osrpavicevic.service.NewsService;
 
 import java.util.Arrays;
@@ -157,6 +160,51 @@ public class NewsController {
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(DefaultResponse.builder()
                     .statusCode(500)
                     .error(exception.getMessage())
+                    .build());
+        }
+    }
+
+    @PutMapping("news/edit-content/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<NewsResponse> editNewsContent(@RequestBody NewsContentRequest content, @PathVariable("id") Long id){
+        try {
+            return ResponseEntity.ok(NewsResponse.builder().message("Successfully updated news content").statusCode(200)
+                    .news(newsService.updateContent(id, content.content()))
+                    .build());
+        } catch (Exception exception) {
+            return ResponseEntity.internalServerError().body(NewsResponse.builder()
+                    .error(exception.getMessage())
+                    .statusCode(500)
+                    .build());
+        }
+    }
+
+    @PutMapping("news/add-picture/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<NewsResponse> addImageToNews(@RequestParam MultipartFile multipartFile, @PathVariable("id") Long id){
+        try {
+            return ResponseEntity.ok(NewsResponse.builder().message("Successfully updated news content").statusCode(200)
+                    .news(newsService.addImageToNews(id, multipartFile))
+                    .build());
+        } catch (Exception exception) {
+            return ResponseEntity.internalServerError().body(NewsResponse.builder()
+                    .error(exception.getMessage())
+                    .statusCode(500)
+                    .build());
+        }
+    }
+
+    @PutMapping("news/remove-picture/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<NewsResponse> removePicture(@PathVariable("id") Long id){
+        try {
+            return ResponseEntity.ok(NewsResponse.builder().message("Successfully updated news content").statusCode(200)
+                    .news(newsService.removePictureForId(id))
+                    .build());
+        } catch (Exception exception) {
+            return ResponseEntity.internalServerError().body(NewsResponse.builder()
+                    .error(exception.getMessage())
+                    .statusCode(500)
                     .build());
         }
     }

@@ -24,6 +24,7 @@ public class PersonEntity {
     private String firstname;
     @Column(nullable = false)
     private String lastname;
+    @Column(length = 10000)
     private String position;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

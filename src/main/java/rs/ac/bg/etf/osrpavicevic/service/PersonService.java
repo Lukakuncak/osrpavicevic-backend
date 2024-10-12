@@ -67,6 +67,9 @@ public class PersonService {
         Optional<PersonEntity> personEntityOptional = personRepository.findById(id);
         if (personEntityOptional.isPresent()) {
             PersonEntity personEntity = personEntityOptional.get();
+            if(personEntity.getImage() != null){
+                cloudinaryService.delete(personEntity.getImage().getId());
+            }
             Image image = cloudinaryService.uploadImage(multipartFile);
             personEntity.setImage(ImageEntity.builder().id(image.getId())
                     .imageId(image.getImageId())
