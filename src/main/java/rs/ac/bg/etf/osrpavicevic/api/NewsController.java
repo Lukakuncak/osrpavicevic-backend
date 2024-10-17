@@ -16,7 +16,6 @@ import rs.ac.bg.etf.osrpavicevic.api.response.ListNewsResponse;
 import rs.ac.bg.etf.osrpavicevic.api.response.PageNewsResponse;
 import rs.ac.bg.etf.osrpavicevic.api.response.NewsResponse;
 import rs.ac.bg.etf.osrpavicevic.constants.TypeOfNews;
-import rs.ac.bg.etf.osrpavicevic.domain.News;
 import rs.ac.bg.etf.osrpavicevic.service.NewsService;
 
 import java.util.Arrays;
