@@ -19,6 +19,7 @@ public interface NewsMapper {
     @Mapping(target = "pinned", constant = "false")
     @Mapping(target = "deleted", constant = "false")
     @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "image", ignore = true)
     NewsEntity fromCreateToEntity(NewsCreateRequest createRequest);
 
     @Mapping(target = "comments", ignore = true)

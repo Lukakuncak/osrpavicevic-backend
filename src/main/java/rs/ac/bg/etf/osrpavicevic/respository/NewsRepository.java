@@ -5,12 +5,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import rs.ac.bg.etf.osrpavicevic.constants.TypeOfNews;
 import rs.ac.bg.etf.osrpavicevic.entity.NewsEntity;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface NewsRepository extends JpaRepository<NewsEntity, Long> {
     List<NewsEntity> findAllByPinnedTrue();
     Page<NewsEntity> findAllByPinnedFalseAndDeletedFalse(Pageable pageable);
